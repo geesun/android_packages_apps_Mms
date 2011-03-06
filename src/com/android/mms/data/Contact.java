@@ -33,6 +33,15 @@ import android.database.sqlite.SqliteWrapper;
 import com.android.mms.ui.MessageUtils;
 import com.android.mms.LogTag;
 
+
+//Geesun 
+import com.android.phone.location.PhoneLocation;
+import com.android.phone.CnPhoneNumUtils;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import com.android.mms.ui.MessagingPreferenceActivity;
+
+
 public class Contact {
     private static final String TAG = "Contact";
     private static final boolean V = false;
@@ -74,6 +83,9 @@ public class Contact {
     private byte [] mAvatarData;
     private boolean mIsStale;
     private boolean mQueryPending;
+
+    //Geesun 
+    private String mCity;
 
     public interface UpdateListener {
         public void onUpdate(Contact updated);
@@ -208,6 +220,11 @@ public class Contact {
         mNameAndNumber = formatNameAndNumber(mName, mNumber);
     }
 
+    //Geesun
+    public String getCity(){
+    	return mCity;
+    }
+    
     public synchronized long getRecipientId() {
         return mRecipientId;
     }
@@ -496,6 +513,13 @@ public class Contact {
                 return true;
             }
 
+            //Geesun
+            String oldCity = emptyIfNull(orig.mCity);
+            String newCity = emptyIfNull(newContactData.mCity);
+            if(!oldCity.equals(newCity)){
+                return true;
+            }
+
             return false;
         }
 
@@ -518,6 +542,9 @@ public class Contact {
                     c.mPresenceText = entry.mPresenceText;
                     c.mAvatarData = entry.mAvatarData;
                     c.mAvatar = entry.mAvatar;
+
+                    //Geesun
+                    c.mCity = entry.mCity;
 
                     // Check to see if this is the local ("me") number and update the name.
                     if (MessageUtils.isLocalNumber(c.mNumber)) {
@@ -565,6 +592,23 @@ public class Contact {
         private Contact getContactInfoForPhoneNumber(String number) {
             number = PhoneNumberUtils.stripSeparators(number);
             Contact entry = new Contact(number);
+
+            //Geesun
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+            boolean enable_city = prefs.getBoolean(MessagingPreferenceActivity.DISPLAY_CITY_ENABLE,
+                    false);
+            if(enable_city){
+                if(number != null){
+                    String strCity = PhoneLocation.getCityFromPhone(number);
+                    synchronized (entry) {
+                    if(strCity != null)
+                        entry.mCity  = strCity;
+                    else
+                        entry.mCity  = "";
+                    }
+                }
+            }
+
 
             //if (LOCAL_DEBUG) log("queryContactInfoByNumber: number=" + number);
 

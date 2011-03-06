@@ -18,6 +18,29 @@
  */
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+  <!--Geesun ADD -->
+
+   <PreferenceCategory android:title="@string/pref_other_setting_title">
+        <CheckBoxPreference android:defaultValue="true"
+            android:key="pref_key_popup_setting"
+            android:summary="@string/pref_summary_popup_setting"
+            android:title="@string/pref_title_popup_setting" />
+        <CheckBoxPreference android:defaultValue="false"
+            android:key="pref_key_display_city"
+            android:summary="@string/pref_summary_display_city"
+            android:title="@string/pref_title_display_city" />
+        <!--     
+        <DialogPreference 
+            android:key="pref_key_about"
+            android:dialogIcon="@android:drawable/ic_dialog_info"           
+            android:title="@string/pref_title_about" 
+            android:summary="@string/pref_summary_about"
+            android:dialogTitle= "@string/pref_title_about"
+            android:negativeButtonText="@null"
+            />
+        -->
+    </PreferenceCategory>
+
   <PreferenceCategory android:title="@string/pref_sms_storage_title"
                       android:key="pref_key_storage_settings">
 <!--

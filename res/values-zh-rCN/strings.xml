@@ -78,7 +78,7 @@
     <string name="compose_title" msgid="558578836596816068">"撰写"</string>
     <string name="to_hint" msgid="224029549150332986">"接收者"</string>
     <string name="subject_hint" msgid="4296714962311604126">"主题"</string>
-    <string name="add_attachment" msgid="7103751293360532684">"附件"</string>
+    <string name="add_attachment" msgid="7103751293360532684">"附加"</string>
     <string name="add_subject" msgid="7616134948428265870">"添加主题"</string>
     <string name="discard" msgid="1624800293064498479">"舍弃"</string>
     <string name="view" msgid="7929667761715467136">"查看"</string>
@@ -337,6 +337,71 @@
     <string name="error_state" msgid="5177386717626893507">"状态不一致"</string>
     <string name="error_state_text" msgid="5006221625000536698">"会话和收件人的状态不一致。请对错误报告拍照并发送至 android-sms-bugs@google.com"</string>
 
+ <!--Geesun -->
+ <string name="unknow_city">本地城市</string>
+ <string name="button_close">关闭</string>
+ <string name="button_delete">删除</string>
+ <string name="button_reply">回复</string>
+ <string name="button_inbox">收件箱</string>
+
+
+ <string name="new_text_at">新消息%s</string>
+ <string name="unread_text_waiting">%d other unread message(s)</string>
+
+ <string name="pref_show_delete_button_dialog_title">删除消息</string>
+ <string name="pref_show_delete_button_dialog_text">你确定要删除这条消息?</string>   
+
+
+ <string name="pref_other_setting_title">额外功能设置</string>   
+ <string name="pref_summary_popup_setting">当收到短信,弹出显示短信</string>   
+ <string name="pref_title_popup_setting">开启弹出短信</string>   
+
+ <string name="pref_summary_display_city">根据短信号码,显示所在城市. 此设置改变要重启本程序才能生效</string>   
+ <string name="pref_title_display_city">开启显示城市</string>   
+
+
+ <string name="pref_title_about">关于</string>   
+ <string name="pref_summary_about">关于额外功能</string>   
+ <string name="pref_about_info">修改作者: Geesun Xu \nE-mail: Geesun@gmail.com \n\n这个额外功能修改是基于官方版本,并增加如下特性:\n1. 联系人模糊查找. \n2.显示短信联系人所在城市. \n3.弹出短信. \n\n有任何建议,意见以及bug,可以联系作者. 
+ </string>  
+ <string name="noContacts">你未拥有电话的联系人</string>
+
+ <string name="ok">确定</string>
+ <string name="cancel">取消</string>
+ <string name="selectContacts">选择联系人</string>
+
+ <string name="menu_export_to_sdcard">备份短信</string>
+ <string name="menu_import_from_sdcard">导入短信</string>
+
+ <string name="exporting_sms_failed_title">备份短信失败</string>
+ <string name="exporting_sms_failed_message">备份短信失败\n失败原因: \"<xliff:g id="fail_reason">%s</xliff:g>\"</string>
+ <string name="no_sdcard_title">没有SD卡</string>
+ <string name="no_sdcard_message">没有找到SD卡</string>
+ <string name="confirm_export_title">确定备份短信</string>
+ <string name="fail_reason_too_many_sms_backup">SD卡上有太多短信</string>
+ <string name="confirm_export_message">"你确定要备份短信到 \"<xliff:g id="vcard_filename">%s</xliff:g>\"? "</string>
+
+ <string name="exporting_sms_list_title">正在备份短信</string>
+ <string name="exporting_sms_list_message">正在备份短信到 \"<xliff:g id="file_name">%s</xliff:g>\"</string>
+ <string name="exporting_sms_list_progress"><xliff:g id="current_number">%s</xliff:g> of <xliff:g id="total_number">%s</xliff:g> SMS</string>
+ <string name="searching_sms_title">查找备份文件</string>
+ <string name="searching_sms_message">在SD卡上查找短信备份文件</string>
+
+ <string name="scanning_sdcard_failed_title">查找失败</string>
+ <string name="scanning_sdcard_failed_message">查找短信文件失败</string>
+ <string name="fail_reason_io_error">读写错误</string>
+ <string name="fail_reason_no_sms_file">SD卡上没有短信备份文件</string>
+ <string name="select_sms_title">选择短信文件</string>
+ <string name="reading_sms_title">读取短信</string>
+
+ <string name="reading_sms_message">正在读取和解析短信文件</string>
+
+ <string name="write_sms_title">恢复短信</string>
+
+ <string name="write_sms_message">正在恢复短信</string>  
+
+ <string name="select_freq_title">选择常用短语</string>
+ <string name="menu_insert_freq_msg">插入常用短语</string>
     <!-- Extra Settings: -->
     <string name="pref_extra_settings">额外设置</string>
 
@@ -423,4 +488,18 @@
     <string name="dialog_phone_goggles_unauthorized">此时发送信息可能不明智。</string>
     <string name="dialog_phone_goggles_ok">发送</string>
     <string name="dialog_phone_goggles_cancel">保存草稿</string>
+
+    <!-- Settings item for SMS Split 160 characters setting -->
+    <string name="pref_title_sms_split_160">短信分页</string>
+    <!-- Settings item description for boolean SMS Split 160 characters setting -->
+    <string name="pref_summary_sms_split_160">160个字符时短信分页发送</string>
+    <!-- Settings item for boolean option for SMS Split Counter -->
+    <string name="pref_title_sms_split_counter">分页标识</string>
+    <!-- Settings item description for boolean SMS Split 160 characters setting -->
+    <string name="pref_summary_sms_split_counter">添加(1/2)到短信末尾</string>
+
+    <!-- Toggle setting for always show character counter -->
+    <string name="pref_title_show_counter_always">总是显示分页标识</string>
+    <string name="pref_summary_show_counter_always">发送短信时总是显示分页标识</string>
+
 </resources>

@@ -160,6 +160,9 @@ import com.android.mms.ui.RecipientsEditor.RecipientContextMenuInfo;
 import com.android.mms.util.SendingProgressTokenManager;
 import com.android.mms.util.SmileyParser;
 
+//Geesun
+import android.text.SpannableStringBuilder;
+import android.widget.ImageButton;
 /**
  * This is the main UI for:
  * 1. Composing a new message;
@@ -204,6 +207,8 @@ public class ComposeMessageActivity extends Activity
     public static final int REQUEST_CODE_CREATE_SLIDESHOW = 17;
     public static final int REQUEST_CODE_ECM_EXIT_DIALOG  = 18;
     public static final int REQUEST_CODE_ADD_CONTACT      = 19;
+	 //Geesun
+    public static final int REQUEST_CODE_SELECT_PHONE     = 20; 
 
     private static final String TAG = "Mms/compose";
 
@@ -241,6 +246,8 @@ public class ComposeMessageActivity extends Activity
     private static final int MENU_UNLOCK_MESSAGE        = 29;
     private static final int MENU_COPY_TO_DRM_PROVIDER  = 30;
     private static final int MENU_INSERT_TEMPLATE 		= 31;
+    //Geesun
+    private static final int MENU_INSERT_FREQ_MSG       = 32;
 
     private static final int RECIPIENTS_MAX_LENGTH = 312;
 
@@ -283,6 +290,9 @@ public class ComposeMessageActivity extends Activity
 
     private RecipientsEditor mRecipientsEditor;  // UI control for editing recipients
 
+	 //Geesun
+    private ImageButton mSelectButton;           // ImageButton for select phone from contacts by cytown
+
     private boolean mIsKeyboardOpen;             // Whether the hardware keyboard is visible
     private boolean mIsLandscape;                // Whether we're in landscape mode
 
@@ -302,6 +312,8 @@ public class ComposeMessageActivity extends Activity
     private WorkingMessage mWorkingMessage;         // The message currently being composed.
 
     private AlertDialog mSmileyDialog;
+    //Geesun
+    private AlertDialog mFreqMsgDialog;
 
     private boolean mWaitingForSubActivity;
     private int mLastRecipientCount;            // Used for warning the user on too many recipients.
@@ -1659,7 +1671,10 @@ public class ComposeMessageActivity extends Activity
 
         ViewStub stub = (ViewStub)findViewById(R.id.recipients_editor_stub);
         if (stub != null) {
-            mRecipientsEditor = (RecipientsEditor) stub.inflate();
+             //Geesun
+            //mRecipientsEditor = (RecipientsEditor) stub.inflate();
+            LinearLayout ll = (LinearLayout) stub.inflate();
+            mRecipientsEditor = (RecipientsEditor)findViewById(R.id.recipients_editor);
         } else {
             mRecipientsEditor = (RecipientsEditor)findViewById(R.id.recipients_editor);
             mRecipientsEditor.setVisibility(View.VISIBLE);
@@ -1698,6 +1713,9 @@ public class ComposeMessageActivity extends Activity
                 }
             }
         });
+
+        mSelectButton = (ImageButton)findViewById(R.id.btn_select);
+        mSelectButton.setOnClickListener(this);
 
         mTopPanel.setVisibility(View.VISIBLE);
     }
@@ -1846,7 +1864,7 @@ public class ComposeMessageActivity extends Activity
 
     private void showSubjectEditor(boolean show) {
         if (Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
-            log("" + show);
+            log("showSubjectEditor: " + show);
         }
 
         if (mSubjectTextEditor == null) {
@@ -1888,13 +1906,15 @@ public class ComposeMessageActivity extends Activity
 
         if (LogTag.SEVERE_WARNING && originalThreadId != 0 &&
                 originalThreadId == mConversation.getThreadId()) {
-            LogTag.warnPossibleRecipientMismatch("ComposeMessageActivity.initialize: " +
-                    " threadId didn't change from: " + originalThreadId, this);
+            LogTag.warnPossibleRecipientMismatch("ComposeMessageActivity.initialize threadId didn't change" +
+                    " from: " + originalThreadId, this);
         }
 
-        log("savedInstanceState = " + savedInstanceState +
-            " intent = " + intent +
-            " mConversation = " + mConversation);
+        if (Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
+            log("initialize: savedInstanceState = " + savedInstanceState +
+                " intent = " + intent +
+                " mConversation = " + mConversation);
+        }
 
         if (cancelFailedToDeliverNotification(getIntent(), this)) {
             // Show a pop-up dialog to inform user the message was
@@ -1946,7 +1966,7 @@ public class ComposeMessageActivity extends Activity
         onKeyboardStateChanged(mIsKeyboardOpen);
 
         if (Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
-            log("update title, mConversation=" + mConversation.toString());
+            log("initialize: update title, mConversation=" + mConversation.toString());
         }
 
         updateTitle(mConversation.getRecipients());
@@ -1995,9 +2015,9 @@ public class ComposeMessageActivity extends Activity
             }
         }
 
-        if (LogTag.VERBOSE || Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
-            log("data=" + intentUri + ", thread_id extra is " + threadId +
-                    ", new conversation=" + conversation + ", mConversation=" + mConversation);
+        if (Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
+            log("onNewIntent: data=" + intentUri + ", thread_id extra is " + threadId);
+            log("     new conversation=" + conversation + ", mConversation=" + mConversation);
         }
 
         if (conversation != null) {
@@ -2016,10 +2036,10 @@ public class ComposeMessageActivity extends Activity
         }
 
         if (sameThread) {
-            log("same conversation");
+            log("onNewIntent: same conversation");
         } else {
-            if (LogTag.VERBOSE || Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
-                log("different conversation");
+            if (Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
+                log("onNewIntent: different conversation, initialize...");
             }
             saveDraft();    // if we've got a draft, save it first
 
@@ -2043,10 +2063,6 @@ public class ComposeMessageActivity extends Activity
                 mWorkingMessage.unDiscard();    // it was discarded in onStop().
             } else if (isRecipientsEditorVisible()) {
                 goToConversationList();
-            } else {
-                loadDraft();
-                mWorkingMessage.setConversation(mConversation);
-                mAttachmentEditor.update(mWorkingMessage);
             }
         }
     }
@@ -2069,7 +2085,7 @@ public class ComposeMessageActivity extends Activity
         mWorkingMessage.syncWorkingRecipients();
 
         if (Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
-            log("update title, mConversation=" + mConversation.toString());
+            log("onStart: update title, mConversation=" + mConversation.toString());
         }
 
         updateTitle(mConversation.getRecipients());
@@ -2121,7 +2137,7 @@ public class ComposeMessageActivity extends Activity
         addRecipientsListeners();
 
         if (Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
-            log("update title, mConversation=" + mConversation.toString());
+            log("onResume: update title, mConversation=" + mConversation.toString());
         }
 
         // There seems to be a bug in the framework such that setting the title
@@ -2167,7 +2183,7 @@ public class ComposeMessageActivity extends Activity
         }
 
         if (Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
-            log("save draft");
+            log("onStop: save draft");
         }
         saveDraft();
 
@@ -2450,6 +2466,10 @@ public class ComposeMessageActivity extends Activity
             menu.add(0, MENU_SEND, 0, R.string.send).setIcon(android.R.drawable.ic_menu_send);
         }
 
+        //Geesun 
+         menu.add(0, MENU_INSERT_FREQ_MSG, 0, R.string.menu_insert_freq_msg).setIcon(
+                R.drawable.ic_menu_word_mms);
+
         menu.add(0, MENU_INSERT_SMILEY, 0, R.string.menu_insert_smiley).setIcon(
                 R.drawable.ic_menu_emoticons);
 
@@ -2526,6 +2546,10 @@ public class ComposeMessageActivity extends Activity
                 break;
             case MENU_INSERT_SMILEY:
                 showSmileyDialog();
+                break;
+            //Geesun:add frequently message select
+            case MENU_INSERT_FREQ_MSG:
+                showFreqMsgDialog();
                 break;
             case MENU_VIEW_CONTACT: {
                 // View the contact for the first (and only) recipient.
@@ -2662,7 +2686,8 @@ public class ComposeMessageActivity extends Activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (DEBUG) {
-            log("requestCode=" + requestCode + ", resultCode=" + resultCode + ", data=" + data);
+            log("onActivityResult: requestCode=" + requestCode
+                    + ", resultCode=" + resultCode + ", data=" + data);
         }
         mWaitingForSubActivity = false;          // We're back!
         if (mWorkingMessage.isFakeMmsForDraft()) {
@@ -2678,7 +2703,7 @@ public class ComposeMessageActivity extends Activity
                 return;
             }
         } else if (resultCode != RESULT_OK){
-            if (DEBUG) log("bail due to resultCode=" + resultCode);
+            if (DEBUG) log("onActivityResult: bail due to resultCode=" + resultCode);
             return;
         }
 
@@ -2761,7 +2786,13 @@ public class ComposeMessageActivity extends Activity
                     }
                 }
                 break;
-
+            //Geesun
+            case REQUEST_CODE_SELECT_PHONE:
+                CharSequence sb = data.getCharSequenceExtra(ListContacts.CONTACTS_LIST_DATA_TAG);
+                mRecipientsEditor.getText().append(sb);
+                //mRecipientList = mRecipientsEditor.getRecipientList();
+                
+                break;
             default:
                 // TODO
                 break;
@@ -2890,7 +2921,7 @@ public class ComposeMessageActivity extends Activity
 
     private void addImage(Uri uri, boolean append) {
         if (Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
-            log("append=" + append + ", uri=" + uri);
+            log("addImage: append=" + append + ", uri=" + uri);
         }
 
         int result = mWorkingMessage.setAttachment(WorkingMessage.IMAGE, uri, append);
@@ -2898,7 +2929,7 @@ public class ComposeMessageActivity extends Activity
         if (result == WorkingMessage.IMAGE_TOO_LARGE ||
             result == WorkingMessage.MESSAGE_SIZE_EXCEEDED) {
             if (Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
-                log("resize image " + uri);
+                log("addImage: resize image " + uri);
             }
             MessageUtils.resizeImageAsync(this,
                     uri, mAttachmentEditorHandler, mResizeImageCallback, append);
@@ -2931,7 +2962,7 @@ public class ComposeMessageActivity extends Activity
         Uri uri = intent.getParcelableExtra("msg_uri");
 
         if (Log.isLoggable(LogTag.APP, Log.DEBUG)) {
-            log("" + uri);
+            log("handle forwarded message " + uri);
         }
 
         if (uri != null) {
@@ -3075,6 +3106,9 @@ public class ComposeMessageActivity extends Activity
     public void onClick(View v) {
         if ((v == mSendButton) && isPreparedForSending()) {
             confirmSendMessageIfNeeded();
+        } else if (v == mSelectButton) {
+            Intent contactListIntent = new Intent(this, ListContacts.class);
+            this.startActivityForResult(contactListIntent, REQUEST_CODE_SELECT_PHONE);
         }
     }
 
@@ -3218,7 +3252,7 @@ public class ComposeMessageActivity extends Activity
         }
 
         if (Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
-            log("for " + conversationUri);
+            log("startMsgListQuery for " + conversationUri);
         }
 
         // Cancel any pending queries
@@ -3262,12 +3296,12 @@ public class ComposeMessageActivity extends Activity
 
     private void loadDraft() {
         if (mWorkingMessage.isWorthSaving()) {
-            Log.w(TAG, "called with non-empty working message");
+            Log.w(TAG, "loadDraft() called with non-empty working message");
             return;
         }
 
         if (Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
-            log("call WorkingMessage.loadDraft");
+            log("loadDraft: call WorkingMessage.loadDraft");
         }
 
         mWorkingMessage = WorkingMessage.loadDraft(this, mConversation);
@@ -3282,11 +3316,15 @@ public class ComposeMessageActivity extends Activity
         }
 
         if (!mWaitingForSubActivity && !mWorkingMessage.isWorthSaving()) {
-            if (LogTag.VERBOSE || Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
-                log("not worth saving, discard WorkingMessage and bail");
+            if (Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
+                log("saveDraft: not worth saving, discard WorkingMessage and bail");
             }
             mWorkingMessage.discard();
             return;
+        }
+
+        if (Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
+            log("saveDraft: call WorkingMessage.saveDraft");
         }
 
         mWorkingMessage.saveDraft();
@@ -3404,7 +3442,7 @@ public class ComposeMessageActivity extends Activity
 
     private void resetMessage() {
         if (Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
-            log("");
+            log("resetMessage");
         }
 
         // Make the attachment editor hide its view.
@@ -3490,7 +3528,6 @@ public class ComposeMessageActivity extends Activity
     private void initActivityState(Bundle bundle, Intent intent) {
         if (bundle != null) {
             String recipients = bundle.getString("recipients");
-            if (LogTag.VERBOSE) log("get mConversation by recipients " + recipients);
             mConversation = Conversation.get(this,
                     ContactList.getByNumbers(recipients,
                             false /* don't block */, true /* replace number */), false);
@@ -3500,27 +3537,24 @@ public class ComposeMessageActivity extends Activity
             return;
         }
 
-        // If we have been passed a thread_id, use that to find our conversation.
+        // If we have been passed a thread_id, use that to find our
+        // conversation.
         long threadId = intent.getLongExtra("thread_id", 0);
         if (threadId > 0) {
-            if (LogTag.VERBOSE) log("get mConversation by threadId " + threadId);
             mConversation = Conversation.get(this, threadId, false);
         } else {
             Uri intentData = intent.getData();
 
             if (intentData != null) {
                 // try to get a conversation based on the data URI passed to our intent.
-                if (LogTag.VERBOSE) log("get mConversation by intentData " + intentData);
                 mConversation = Conversation.get(this, intentData, false);
             } else {
                 // special intent extra parameter to specify the address
                 String address = intent.getStringExtra("address");
                 if (!TextUtils.isEmpty(address)) {
-                    if (LogTag.VERBOSE) log("get mConversation by address " + address);
                     mConversation = Conversation.get(this, ContactList.getByNumbers(address,
                             false /* don't block */, true /* replace number */), false);
                 } else {
-                    if (LogTag.VERBOSE) log("create new conversation");
                     mConversation = Conversation.createNew(this);
                 }
             }
@@ -3720,7 +3754,45 @@ public class ComposeMessageActivity extends Activity
 
         mSmileyDialog.show();
     }
+    private void showFreqMsgDialog() {
+        if (mFreqMsgDialog == null) {
+            final String[] texts = getResources().getStringArray(
+                    R.array.default_freq_texts);
 
+            final int N = texts.length;
+
+            List<Map<String, ?>> entries = new ArrayList<Map<String, ?>>();
+            
+            for (int i = 0; i < N; i++) {
+                HashMap<String, Object> entry = new HashMap<String, Object>(); 
+                entry.put("text", texts[i]);
+                entries.add(entry);
+            }
+
+            final SimpleAdapter a = new SimpleAdapter(
+                    this,
+                    entries,
+                    R.layout.freqmsg_menu_item,
+                    new String[] {"text"},
+                    new int[] {R.id.freq_msg_text});
+
+            AlertDialog.Builder b = new AlertDialog.Builder(this);
+
+            b.setTitle(getString(R.string.select_freq_title));
+
+            b.setCancelable(true);
+            b.setAdapter(a, new DialogInterface.OnClickListener() {
+                public final void onClick(DialogInterface dialog, int which) {
+                    HashMap<String, Object> item = (HashMap<String, Object>) a.getItem(which);
+                    mTextEditor.append((String)item.get("text"));
+                }
+            });
+
+            mFreqMsgDialog = b.create();
+        }
+
+        mFreqMsgDialog.show();
+    }
     public void onUpdate(final Contact updated) {
         // Using an existing handler for the post, rather than conjuring up a new one.
         mMessageListItemHandler.post(new Runnable() {

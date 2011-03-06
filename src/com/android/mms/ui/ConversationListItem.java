@@ -46,6 +46,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+//Geesun
+import android.widget.Toast;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -66,6 +68,9 @@ public class ConversationListItem extends RelativeLayout implements Contact.Upda
     private boolean mBlackBackground;
 
     static private Drawable sDefaultContactImage;
+	
+    //Geesun 
+    private TextView mCityView;
 
     // For posting UI update Runnables from other threads:
     private Handler mHandler = new Handler();
@@ -92,6 +97,8 @@ public class ConversationListItem extends RelativeLayout implements Contact.Upda
 
         mFromView = (TextView) findViewById(R.id.from);
         mSubjectView = (TextView) findViewById(R.id.subject);
+        //Geesun
+        mCityView = (TextView) findViewById(R.id.city);
 
         mDateView = (TextView) findViewById(R.id.date);
         mAttachmentView = findViewById(R.id.attachment);
@@ -177,9 +184,24 @@ public class ConversationListItem extends RelativeLayout implements Contact.Upda
         mAvatarView.setVisibility(View.VISIBLE);
     }
 
+
+    //Geesun 
+    private void updateCityView(){
+        ConversationListItemData ch = mConversationHeader;
+        if (ch.getContacts().size() == 1) {
+            Contact contact = ch.getContacts().get(0);
+            if(contact.getCity() != null){
+                mCityView.setText(contact.getCity());
+            }
+        }
+    }
+
     private void updateFromView() {
         ConversationListItemData ch = mConversationHeader;
         ch.updateRecipients();
+       
+        updateCityView();
+
         mFromView.setText(formatMessage(ch));
         setPresenceIcon(ch.getContacts().getPresenceResId());
         updateAvatarView();
@@ -236,6 +258,10 @@ public class ConversationListItem extends RelativeLayout implements Contact.Upda
 
         // Register for updates in changes of any of the contacts in this conversation.
         ContactList contacts = ch.getContacts();
+    
+        //Geesun		 
+        updateCityView();
+
 
         if (DEBUG) Log.v(TAG, "bind: contacts.addListeners " + this);
         Contact.addListener(this);

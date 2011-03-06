@@ -270,6 +270,17 @@
                     android:pathPrefix="/search_suggest_shortcut"
                     android:readPermission="android.permission.GLOBAL_SEARCH" />
         </provider>
+        <!-- Geesun -->
+        <activity android:name=".transaction.SmsPopupActivity" 
+            android:theme="@android:style/Theme.Dialog"
+            android:launchMode="singleTask"
+            />
+        <activity android:name=".ui.ListContacts"
+            android:label="@string/selectContacts"                  
+            />
+               <activity android:name=".ui.MmsViewer"
+                   android:label="@string/selectContacts">
+               </activity>
 
         <activity android:name=".templates.TemplatesListActivity"
             android:label="@string/template_list_title">

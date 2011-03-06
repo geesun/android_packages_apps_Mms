@@ -64,6 +64,9 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
+//Geesun
+import com.android.mms.restore.SmsExporter;
+import com.android.mms.restore.SmsImporter;
 /**
  * This activity provides a list view of existing conversations.
  */
@@ -83,6 +86,9 @@ public class ConversationList extends ListActivity
     public static final int MENU_SEARCH               = 1;
     public static final int MENU_DELETE_ALL           = 3;
     public static final int MENU_PREFERENCES          = 4;
+    //Geesun
+    private static final int MENU_EXPORT_TO_SDCARD       = 5;
+    private static final int MENU_IMPORT_FROM_SDCARD     = 6;
 
     // IDs of the context menu items for the list of conversations.
     public static final int MENU_DELETE               = 0;
@@ -298,7 +304,14 @@ public class ConversationList extends ListActivity
         if (mListAdapter.getCount() > 0) {
             menu.add(0, MENU_DELETE_ALL, 0, R.string.menu_delete_all).setIcon(
                     android.R.drawable.ic_menu_delete);
+            //Geesun
+            menu.add(0, MENU_EXPORT_TO_SDCARD, 0, R.string.menu_export_to_sdcard).setIcon(
+                    R.drawable.ic_menu_export_mms);
         }
+
+        //Geesun
+        menu.add(0, MENU_IMPORT_FROM_SDCARD, 0, R.string.menu_import_from_sdcard).setIcon(
+                R.drawable.ic_menu_import_mms);
 
         menu.add(0, MENU_SEARCH, 0, android.R.string.search_go).
             setIcon(android.R.drawable.ic_menu_search).
@@ -334,6 +347,15 @@ public class ConversationList extends ListActivity
                 startActivityIfNeeded(intent, -1);
                 break;
             }
+            //Geesun
+            case MENU_EXPORT_TO_SDCARD:
+                SmsExporter exporter = new SmsExporter(this);
+                exporter.startExportSmsToSdCard();
+                break;
+            case MENU_IMPORT_FROM_SDCARD:
+                SmsImporter importer= new SmsImporter(this);
+                importer.startImportSmsFromSdCard();
+                break;
             default:
                 return true;
         }
@@ -342,6 +364,10 @@ public class ConversationList extends ListActivity
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
+        if (LOCAL_LOGV) {
+            Log.v(TAG, "onListItemClick: position=" + position + ", id=" + id);
+        }
+
         if (position == 0) {
             createNewMessage();
         } else {
@@ -356,8 +382,8 @@ public class ConversationList extends ListActivity
             Conversation conv = Conversation.from(this, cursor);
             long tid = conv.getThreadId();
 
-            if (LogTag.VERBOSE) {
-                Log.d(TAG, "onListItemClick: pos=" + position + ", view=" + v + ", tid=" + tid);
+            if (LOCAL_LOGV) {
+                Log.v(TAG, "onListItemClick: pos=" + position + ", view=" + v + ", tid=" + tid);
             }
 
             openThread(tid);

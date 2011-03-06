@@ -56,6 +56,20 @@
     <item msgid="6334637439528489607">"大笑"</item>
     <item msgid="7602915122893958066">"困惑"</item>
   </string-array>
+
+  <!-- Geesun -->
+  <string-array name="default_freq_texts">
+      <item>请速回电话</item>  
+      <item>我现在很忙，晚一些给你打电话</item> 
+      <item>我有事，晚一点回家</item>   
+      <item>你什么时候到?</item>   
+      <item>你现在在哪里?</item>  
+      <item>我有急事，约会取消</item> 
+      <item>生日快乐</item> 
+      <item>身体健康,万事如意</item>   
+      <item>有空请给我打电话</item>  
+      <item>请速回公司</item>  
+  </string-array>
   <string-array name="pref_mms_notification_vibrate_pattern_entries">
     <item>正常</item>
     <item>中等振动</item>

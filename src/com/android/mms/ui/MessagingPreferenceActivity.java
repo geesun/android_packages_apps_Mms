@@ -44,6 +44,8 @@ import android.view.MenuItem;
 import com.android.mms.templates.TemplatesListActivity;
 import com.android.mms.util.Recycler;
 
+//Geesun 
+import android.preference.DialogPreference;
 /**
  * With this activity, users can set preferences for MMS and SMS and
  * can access and manipulate SMS messages stored on the SIM.
@@ -74,6 +76,7 @@ public class MessagingPreferenceActivity extends PreferenceActivity {
     public static final String ONLY_MOBILE_NUMBERS      = "pref_key_mms_only_mobile_numbers";
     public static final String SENT_TIMESTAMP           = "pref_key_mms_use_sent_timestamp";
     public static final String MESSAGE_FONT_SIZE     = "pref_key_mms_message_font_size";
+    
     public static final String EMAIL_ADDR_COMPLETION        = "pref_key_mms_email_addr_completion";
     public static final String NOTIFICATION_VIBRATE_PATTERN = "pref_key_mms_notification_vibrate_pattern";
     public static final String NOTIFICATION_VIBRATE_PATTERN_CUSTOM = "pref_key_mms_notification_vibrate_pattern_custom";
@@ -82,6 +85,9 @@ public class MessagingPreferenceActivity extends PreferenceActivity {
     public static final String SHOW_GESTURE = "pref_key_templates_show_gesture";
     public static final String GESTURE_SENSITIVITY = "pref_key_templates_gestures_sensitivity";
     public static final String GESTURE_SENSITIVITY_VALUE = "pref_key_templates_gestures_sensitivity_value";
+	 //Geesun 
+    public static final String POPUP_ENABLED                = "pref_key_popup_setting";
+    public static final String DISPLAY_CITY_ENABLE          = "pref_key_display_city";
 
     // Menu entries
     private static final int MENU_RESTORE_DEFAULTS    = 1;

@@ -228,12 +228,12 @@ public class SmsReceiverService extends Service {
                             address, msgText, threadId, status == Sms.STATUS_PENDING,
                             msgUri);
 
-                    if (LogTag.VERBOSE || Log.isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
+                    if (Log.isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
                         Log.v(TAG, "sendFirstQueuedMessage " + msgUri +
                                 ", address: " + address +
-                                ", threadId: " + threadId);
+                                ", threadId: " + threadId +
+                                ", body: " + msgText);
                     }
-
                     try {
                         sender.sendMessage(SendingProgressTokenManager.NO_TOKEN);;
                         mSending = true;

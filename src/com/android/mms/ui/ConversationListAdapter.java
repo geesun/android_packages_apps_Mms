@@ -18,7 +18,6 @@
 package com.android.mms.ui;
 
 import com.android.mms.R;
-import com.android.mms.LogTag;
 import com.android.mms.data.Conversation;
 
 import android.content.Context;
@@ -58,6 +57,7 @@ public class ConversationListAdapter extends CursorAdapter implements AbsListVie
 
         ConversationListItem headerView = (ConversationListItem) view;
         Conversation conv = Conversation.from(context, cursor);
+
         ConversationListItemData ch = new ConversationListItemData(context, conv);
         headerView.bind(context, ch);
     }

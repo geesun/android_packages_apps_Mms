@@ -56,6 +56,20 @@
         android:layout_alignWithParentIfMissing="true"
         android:ellipsize="marquee"  />
 
+    <!--Geesun -->
+        <TextView android:id="@+id/city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_marginLeft="5dip"
+        android:layout_marginTop="6dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginBottom="10dip"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" 
+        />
+
+
     <TextView android:id="@+id/date"
         android:layout_marginTop="2dip"
         android:layout_marginBottom="10dip"

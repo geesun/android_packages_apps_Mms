@@ -95,7 +95,20 @@
         <item>16</item>
         <item>18</item>
         <item>20</item>
-  </string-array>
+    </string-array>
+    <!--Geesun -->
+    <string-array name="default_freq_texts">
+        <item>Please return my call.</item>
+        <item>I am busy at this time, I\'ll return your call later.</item>
+        <item>I got somethings to do, be home might be late.</item>
+        <item>When are u gonna arrived?</item>
+        <item>Where are you?</item>
+        <item>I have an urgency stuffs to handle, the meeting will canceled.</item>
+        <item>Happy birthday!</item>
+        <item>Wish u good luck.</item>
+        <item>When u have free time, give me a call.</item>
+        <item>Quicklly come back to the office.</item>
+    </string-array>
 
     <string-array name="pref_mms_notification_vibrate_pattern_entries">
       <item>Normal</item>

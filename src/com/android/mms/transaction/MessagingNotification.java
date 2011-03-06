@@ -69,6 +69,10 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+//Geesun 
+import android.widget.Toast;
+import android.os.Bundle;
+
 /**
  * This class is used to update the notification indicator. It will check whether
  * there are unread messages. If yes, it would show the notification indicator,
@@ -77,7 +81,7 @@ import java.util.TreeSet;
 public class MessagingNotification {
     private static final String TAG = LogTag.APP;
 
-    private static final int NOTIFICATION_ID = 123;
+    public static final int NOTIFICATION_ID = 123;
     public static final int MESSAGE_FAILED_NOTIFICATION_ID = 789;
     public static final int DOWNLOAD_FAILED_NOTIFICATION_ID = 531;
 
@@ -302,10 +306,15 @@ public class MessagingNotification {
         public long mTimeMillis;
         public String mTitle;
         public int mCount;
+        //Geesun
+        public String mAddress;
+        public long  mThreadId;
 
         public MmsSmsNotificationInfo(
                 Intent clickIntent, String description, int iconResourceId,
-                CharSequence ticker, long timeMillis, String title, int count) {
+                //Geesun
+                /*CharSequence ticker, long timeMillis, String title, int count) {*/
+                CharSequence ticker, long timeMillis, String title, int count,String address,long threadId) {
             mClickIntent = clickIntent;
             mDescription = description;
             mIconResourceId = iconResourceId;
@@ -313,6 +322,10 @@ public class MessagingNotification {
             mTimeMillis = timeMillis;
             mTitle = title;
             mCount = count;
+
+            //Geesun 
+            mAddress = address;
+            mThreadId = threadId;
         }
 
         public void deliver(Context context, boolean isNew, int count, int uniqueThreads) {
@@ -320,6 +333,20 @@ public class MessagingNotification {
                     context, mClickIntent, mDescription, mIconResourceId, isNew,
                     (isNew? mTicker : null), // only display the ticker if the message is new
                     mTimeMillis, mTitle, count, uniqueThreads);
+            //Geesun 
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            boolean enable_pop = prefs.getBoolean(MessagingPreferenceActivity.POPUP_ENABLED,
+                true);
+            if(enable_pop){
+                final Intent popup = new Intent(context, SmsPopupActivity.class);
+                popup.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                SmsPopupMessage msg = new SmsPopupMessage(context,mAddress,mDescription
+                        ,mThreadId,mTimeMillis,mCount);
+
+                popup.putExtras(msg.toBundle());
+                context.startActivity(popup);
+            }
+
         }
 
         public long getTime() {
@@ -335,7 +362,7 @@ public class MessagingNotification {
         }
     }
 
-    private static final MmsSmsNotificationInfo getMmsNewMessageNotificationInfo(
+    public static final MmsSmsNotificationInfo getMmsNewMessageNotificationInfo(
             Context context, Set<Long> threads) {
         ContentResolver resolver = context.getContentResolver();
 
@@ -473,11 +500,11 @@ public class MessagingNotification {
                 0, senderInfo.length() - 2);
         CharSequence ticker = buildTickerMessage(
                 context, address, subject, body);
-
+        //Geesun
         return new MmsSmsNotificationInfo(
                 clickIntent, body, iconResourceId, ticker, timeMillis,
-                senderInfoName, count);
-    }
+                senderInfoName, count,address,threadId);
+            }
 
     public static void cancelNotification(Context context, int notificationId) {
         NotificationManager nm = (NotificationManager) context.getSystemService(
