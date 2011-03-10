@@ -493,14 +493,6 @@
     <string name="dialog_phone_goggles_ok">发送</string>
     <string name="dialog_phone_goggles_cancel">保存草稿</string>
 
-    <!-- Settings item for SMS Split 160 characters setting -->
-    <string name="pref_title_sms_split_160">短信分页</string>
-    <!-- Settings item description for boolean SMS Split 160 characters setting -->
-    <string name="pref_summary_sms_split_160">160个字符时短信分页发送</string>
-    <!-- Settings item for boolean option for SMS Split Counter -->
-    <string name="pref_title_sms_split_counter">分页标识</string>
-    <!-- Settings item description for boolean SMS Split 160 characters setting -->
-    <string name="pref_summary_sms_split_counter">添加(1/2)到短信末尾</string>
 
     <!-- Toggle setting for always show character counter -->
     <string name="pref_title_show_counter_always">总是显示分页标识</string>
