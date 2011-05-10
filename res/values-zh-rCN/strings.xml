@@ -437,6 +437,10 @@
     <string name="pref_title_mms_full_timestamp">完整时间戳</string>
     <string name="pref_summary_mms_full_timestamp">启用在消息时间戳中显示日期和时间</string>
 
+    <!-- Timestamp GMT Corection -->
+    <string name="pref_title_mms_use_sent_timestamp_gmt_correction">显示标准时间戳</string>
+    <string name="pref_summary_mms_use_sent_timestamp_gmt_correction">强制显示国际标准时间戳</string>
+
     <!-- Which timestamps -->
     <string name="pref_title_mms_use_sent_timestamp">使用原始时间戳</string>
     <string name="pref_summary_mms_use_sent_timestamp">以收到日期代替发送日期显示并存储</string>

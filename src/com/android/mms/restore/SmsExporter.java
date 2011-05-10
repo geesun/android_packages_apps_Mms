@@ -32,7 +32,7 @@ public class SmsExporter {
 	private final int mFileIndexMaximum = 100;
 	
 	private final String mFileNameExtension = "sms";
-	private final String mFileNamePrefix = "androidin_";
+	private final String mFileNamePrefix = "opda_";
 	private final String mFileNameSuffix = "";
 	private final String mTargetDirectory = "/sdcard";
 	
