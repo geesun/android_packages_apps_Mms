@@ -7,7 +7,7 @@
 >
 
     <CheckBox android:id="@+id/select"
-    		 android:layout_width="32dip"
+    		 android:layout_width="35dip"
         android:layout_height="32dip"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="5dip"
