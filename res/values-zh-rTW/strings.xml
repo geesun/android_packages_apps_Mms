@@ -379,23 +379,10 @@
 
     <!-- The vibrate notification modes -->
     <string-array name="prefEntries_vibrateWhen">
-        <!-- Always -->
-        <item msgid="2520871831815631409">"永遠要"</item>
-        <!-- Only when the phone is in Silent mode -->
-        <item msgid="6069709696037750627">"靜音時才啟用"</item>
-        <!-- Never -->
-        <item msgid="7486145357487111435">"永遠不要"</item>
+      <item msgid="2520871831815631409">"一律"</item>
+      <item msgid="6069709696037750627">"靜音時才啟用"</item>
+      <item msgid="7486145357487111435">"永遠不要"</item>
     </string-array>
-
-    <!-- The default vibrateWhen value, when none is set -->
-    <!-- skipping untranslatable /resources:0/string:name=prefDefault_vibrateWhen -->
-    <!-- The value to use when migrating from old versions for a true vibrate setting -->
-    <!-- skipping untranslatable /resources:0/string:name=prefDefault_vibrate_true -->
-    <!-- The value to use when migrating from old versions for a false vibrate setting -->
-    <!-- skipping untranslatable /resources:0/string:name=prefDefault_vibrate_false -->
-
-    <!-- The vibrateWhen values -->
-    <!-- skipping untranslatable /resources:0/string-array:name=prefValues_vibrateWhen -->
 
     <!-- Dialog title for the Vibrate dialog -->
     <string name="prefDialogTitle_vibrateWhen" msgid="6419655771690242118">"震動"</string>
@@ -410,7 +397,8 @@
     <string name="pref_summary_mms_retrieval_during_roaming" msgid="2427892806582531020">"漫遊時自動擷取簡訊"</string>
 
     <!-- Setting item for folder to save MMS Attachments to -->
-    <string name="pref_title_save_location">附件儲存到資料夾</string>
+    <string name="pref_title_save_location">附件儲存資料夾</string>
+    <string name="pref_summary_save_location">用來儲存訊息附件的資料夾</string>
 
     <!-- Label prepended to recipient's name in Undelivered Messages screen -->
     <string name="to_label" msgid="2355268818058389047">"給 "</string>
